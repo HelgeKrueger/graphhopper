@@ -1,6 +1,12 @@
 // usage: log('inside coolFunc',this,arguments);
 // http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
 var debug = false;
+function round(val, precision) {
+    if (precision === undefined)
+        precision = 1e6;
+    return Math.round(val * precision) / precision;
+}
+
 window.log = function () {
     log.history = log.history || [];   // store logs to an array for reference
     log.history.push(arguments);

@@ -26,7 +26,8 @@ global.$  = global.jQuery;
 require('./lib/jquery-ui-custom-1.11.4.min.js');
 require('./lib/jquery.history.js');
 require('./lib/jquery.autocomplete.js');
-require('./ghrequest.js');
+
+var GHRequest = require('./graphhopper/GHRequest.js');
 
 var ghRequest = new GHRequest(host);
 var bounds = {};
@@ -44,6 +45,20 @@ var translate = require('./translate.js');
 var format = require('./tools/format.js');
 var urlTools = require('./tools/url.js');
 var vehicle = require('./tools/vehicle.js');
+
+var debug = false;
+
+// usage: log('inside coolFunc',this,arguments);
+// http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+if (global.window) {
+    window.log = function () {
+        log.history = log.history || [];   // store logs to an array for reference
+        log.history.push(arguments);
+        if (this.console && debug) {
+            console.log(Array.prototype.slice.call(arguments));
+        }
+    };
+}
 
 $(document).ready(function (e) {
     // fixing cross domain support e.g in Opera

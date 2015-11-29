@@ -1,6 +1,3 @@
-var osmAttr = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-// provider
-//@see http://leaflet-extras.github.io/leaflet-providers/preview/index.html
 var osmAttr = '&copy; <a href="http://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors';
 
 var tp = "ls";
@@ -76,7 +73,7 @@ var esriAerial = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/servic
     maxZoom: 18
 });
 
-module.exports = function () { return {
+var availableTileLayers = {
     "Lyrk": lyrk,
     "Omniscale": omniscale,
     "MapQuest": mapquest,
@@ -90,4 +87,16 @@ module.exports = function () { return {
     "OpenStreetMap": osm,
     "OpenStreetMap.de": osmde,
     "Sorbian Language": sorbianLang
-}; };
+};
+
+module.exports.getAvailableTileLayers = function () {
+    return availableTileLayers;
+};
+
+module.exports.selectLayer = function (layerName) {
+    var defaultLayer = availableTileLayers[layerName];
+    if (!defaultLayer)
+        defaultLayer = availableTileLayers["Omniscale"];
+
+    return defaultLayer;
+}

@@ -1,3 +1,5 @@
+var tileLayers = require('./config/tileLayers.js');
+
 var routingLayer;
 var map;
 var menuStart;
@@ -26,11 +28,7 @@ function initMap(bounds, setStartCoord, setIntermediateCoord, setEndCoord, selec
     adjustMapSize();
     log("init map at " + JSON.stringify(bounds));
 
-    var baseMaps = require('./baseMaps.js')();
-
-    var defaultLayer = baseMaps[selectLayer];
-    if (!defaultLayer)
-        defaultLayer = baseMaps["Omniscale"];
+    var defaultLayer = tileLayers.selectLayer(selectLayer);
 
     // default
     map = L.map('map', {
@@ -99,7 +97,7 @@ function initMap(bounds, setStartCoord, setIntermediateCoord, setEndCoord, selec
         state: 3
     });
 
-    L.control.layers(baseMaps/*, overlays*/).addTo(map);
+    L.control.layers(tileLayers.getAvailableTileLayers()/*, overlays*/).addTo(map);
 
     map.on('baselayerchange', function (a) {
         if (a.name) {

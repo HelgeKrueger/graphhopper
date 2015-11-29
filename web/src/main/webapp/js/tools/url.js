@@ -1,3 +1,8 @@
+var isArray = function (value) {
+    var stringValue = Object.prototype.toString.call(value);
+    return (stringValue.toLowerCase() === "[object array]");
+};
+
 function parseUrlWithHisto() {
     if (window.location.hash)
         return parseUrl(window.location.hash);
@@ -31,7 +36,7 @@ function parseUrl(query) {
             res[key] = value;
         } else {
             var tmpVal = res[key];
-            if (GHroute.isArray(tmpVal)) {
+            if (isArray(tmpVal)) {
                 tmpVal.push(value);
             } else if (tmpVal) {
                 res[key] = [tmpVal, value];

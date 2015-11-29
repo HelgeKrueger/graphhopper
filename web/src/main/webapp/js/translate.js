@@ -54,18 +54,20 @@ function formatValue(orig, query) {
 }
 
 function initI18N() {
-    $('#searchButton').attr("value", tr("searchButton"));
-    var location_points = $("#locationpoints > div.pointDiv > input.pointInput");
-    var l = location_points.size();
-    $(location_points).each(function (index) {
-        if (index === 0)
-            $(this).attr("placeholder", tr("fromHint"));
-        else if (index === (l - 1))
-            $(this).attr("placeholder", tr("toHint"));
-        else
-            $(this).attr("placeholder", tr("viaHint"));
-    });
-    $('#gpxExportButton').attr("title", tr("gpxExportButton"));
+    if (global.$) {
+        $('#searchButton').attr("value", tr("searchButton"));
+        var location_points = $("#locationpoints > div.pointDiv > input.pointInput");
+        var l = location_points.size();
+        $(location_points).each(function (index) {
+            if (index === 0)
+                $(this).attr("placeholder", tr("fromHint"));
+            else if (index === (l - 1))
+                $(this).attr("placeholder", tr("toHint"));
+            else
+                $(this).attr("placeholder", tr("viaHint"));
+        });
+        $('#gpxExportButton').attr("title", tr("gpxExportButton"));
+    }
 }
 
 module.exports.createDistanceString = function (dist) {

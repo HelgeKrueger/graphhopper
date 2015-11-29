@@ -1,5 +1,3 @@
-// usage: log('inside coolFunc',this,arguments);
-// http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
 var debug = false;
 function round(val, precision) {
     if (precision === undefined)
@@ -7,13 +5,17 @@ function round(val, precision) {
     return Math.round(val * precision) / precision;
 }
 
-window.log = function () {
-    log.history = log.history || [];   // store logs to an array for reference
-    log.history.push(arguments);
-    if (this.console && debug) {
-        console.log(Array.prototype.slice.call(arguments));
-    }
-};
+// usage: log('inside coolFunc',this,arguments);
+// http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
+if (global.window) {
+    window.log = function () {
+        log.history = log.history || [];   // store logs to an array for reference
+        log.history.push(arguments);
+        if (this.console && debug) {
+            console.log(Array.prototype.slice.call(arguments));
+        }
+    };
+}
 
 // compatiblity script taken from http://stackoverflow.com/a/11054570/194609
 if (!Function.prototype.bind) {
@@ -429,7 +431,7 @@ GHRequest.prototype.createPath = function (url) {
     return url;
 };
 
-function decodePath(encoded, is3D) {
+decodePath = function (encoded, is3D) {
     // var start = new Date().getTime();
     var len = encoded.length;
     var index = 0;

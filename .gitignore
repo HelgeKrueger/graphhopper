@@ -36,6 +36,5 @@ android/.gradle
 .project
 local.properties
 **/node_modules
-web/src/main/webapp/js/main.js
 *.zip
 

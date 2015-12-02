@@ -4,7 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "bundle": "browserify -g uglifyify src/main/webapp/js/main-template.js -o src/main/webapp/js/main.js",
+    "bundle": "browserify src/main/webapp/js/main-template.js -o src/main/webapp/js/main.js",
+    "bundleDebug": "browserify src/main/webapp/js/main-template.js --debug -o src/main/webapp/js/main.js",
+    "bundleUgly": "browserify -g uglifyify src/main/webapp/js/main-template.js -o src/main/webapp/js/main.js",
     "test": "JASMINE_CONFIG_PATH=src/test/webapp/spec/jasmine.json jasmine"
   },
   "author": "",

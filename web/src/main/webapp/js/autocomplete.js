@@ -76,7 +76,7 @@ AutoComplete.prototype.getAutoCompleteDiv = function (index) {
     return $('#locationpoints > div.pointDiv').eq(index).find(".pointInput");
 }
 
-AutoComplete.prototype.hideAutoComplete = function () {
+AutoComplete.prototype.hide = function () {
     $(':input[id$="_Input"]').autocomplete().hide();
 }
 
@@ -156,7 +156,7 @@ AutoComplete.prototype.showListForIndex = function (ghRequest, routeIfAllResolve
 AutoComplete.prototype.createStub = function () {
     return {
         showListForIndex: function () {},
-        hideAutoComplete: function () {}
+        hide: function () {}
     };
 };
 

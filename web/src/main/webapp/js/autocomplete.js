@@ -1,9 +1,10 @@
 var formatTools = require('./tools/format.js');
+var GHInput = require('./graphhopper/GHInput.js');
 
 var dataToHtml = function (data, query) {
     var element = "";
     if (data.name)
-        element += "<div class='nameseg'>" + formatValue(data.name, query) + "</div>";
+        element += "<div class='nameseg'>" + formatTools.formatValue(data.name, query) + "</div>";
     var addStr = "";
     if (data.postcode)
         addStr = data.postcode;
@@ -13,7 +14,7 @@ var dataToHtml = function (data, query) {
         addStr = formatTools.insComma(addStr, data.country);
 
     if (addStr)
-        element += "<div class='cityseg'>" + formatValue(addStr, query) + "</div>";
+        element += "<div class='cityseg'>" + formatTools.formatValue(addStr, query) + "</div>";
 
     if (data.osm_key === "highway") {
         // ignore
@@ -42,16 +43,46 @@ var dataToText = function (data) {
     return text;
 }
 
-function getAutoCompleteDiv(index) {
+var AutoComplete = function (host, key) {
+    this.host = host;
+    this.key = key;
+    this.dataType = "json";
+};
+
+AutoComplete.prototype.createPath = function (url) {
+    for (var key in this.api_params) {
+        var val = this.api_params[key];
+        if (GHRoute.isArray(val)) {
+            for (var keyIndex in val) {
+                url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val[keyIndex]);
+            }
+        } else {
+            url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(val);
+        }
+    }
+    return url;
+};
+
+AutoComplete.prototype.createGeocodeURL = function (ghRequest, prevIndex) {
+    var path = this.createPath(this.host + "/geocode?limit=6&type=" + this.dataType + "&key=" + this.key);
+    if (prevIndex >= 0 && prevIndex < ghRequest.route.size()) {
+        var point = ghRequest.route.getIndex(prevIndex);
+        path += "&point=" + point.lat + "," + point.lng;
+    }
+    return path;
+};
+
+AutoComplete.prototype.getAutoCompleteDiv = function (index) {
     return $('#locationpoints > div.pointDiv').eq(index).find(".pointInput");
 }
 
-function hideAutoComplete() {
+AutoComplete.prototype.hideAutoComplete = function () {
     $(':input[id$="_Input"]').autocomplete().hide();
 }
 
-function setAutoCompleteList(ghRequest, routeIfAllResolved, host, index) {
-    var myAutoDiv = getAutoCompleteDiv(index);
+AutoComplete.prototype.showListForIndex = function (ghRequest, routeIfAllResolved, index) {
+    var myAutoDiv = this.getAutoCompleteDiv(index);
+    var url = this.createGeocodeURL(ghRequest, index - 1);
 
     var options = {
         containerClass: "autocomplete",
@@ -73,8 +104,7 @@ function setAutoCompleteList(ghRequest, routeIfAllResolved, host, index) {
             return val === undefined;
         },
         serviceUrl: function () {
-            // see https://graphhopper.com/#directions-api
-            return ghRequest.createGeocodeURL(host, index - 1);
+            return url;
         },
         transformResult: function (response, originalQuery) {
             response.suggestions = [];
@@ -123,5 +153,12 @@ function setAutoCompleteList(ghRequest, routeIfAllResolved, host, index) {
 //    });
 }
 
-module.exports.hide = hideAutoComplete;
-module.exports.showListForIndex = setAutoCompleteList;
+AutoComplete.prototype.createStub = function () {
+    return {
+        showListForIndex: function () {},
+        hideAutoComplete: function () {}
+    };
+};
+
+module.exports = AutoComplete;
+

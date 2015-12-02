@@ -62,3 +62,8 @@ module.exports.formatAddress = function (address) {
 };
 
 module.exports.insComma = insComma;
+
+module.exports.formatValue = function (orig, query) {
+    var pattern = '(' + $.Autocomplete.utils.escapeRegExChars(query) + ')';
+    return orig.replace(/[<>]/g, "_").replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>');
+}

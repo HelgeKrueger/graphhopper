@@ -28,16 +28,16 @@ require('./lib/jquery.history.js');
 require('./lib/jquery.autocomplete.js');
 
 var GHRequest = require('./graphhopper/GHRequest.js');
+var AutoComplete = require('./autocomplete.js');
 
-var ghRequest = new GHRequest(host);
-var bounds = {};
-
-var activeLayer = '';
-var metaVersionInfo;
+// To enable autocomplete
+// - Remove the first line
+// - Uncomment the second line and add a valid API token
+var autocomplete = AutoComplete.prototype.createStub();
+// var autocomplete = new AutoComplete('http://graphhopper.com/api/1', 'your api token goes here');
 
 var mapLayer = require('./map.js');
 var nominatim = require('./nominatim.js');
-var autocomplete = require('./autocomplete.js');
 var gpxExport = require('./gpxexport.js');
 var messages = require('./messages.js');
 var translate = require('./translate.js');
@@ -47,6 +47,11 @@ var urlTools = require('./tools/url.js');
 var vehicle = require('./tools/vehicle.js');
 
 var debug = false;
+var ghRequest = new GHRequest(host);
+var bounds = {};
+
+var activeLayer = '';
+var metaVersionInfo;
 
 // usage: log('inside coolFunc',this,arguments);
 // http://paulirish.com/2009/log-a-lightweight-wrapper-for-consolelog/
@@ -296,7 +301,7 @@ function checkInput() {
             div.find(".pointDelete").hide();
         }
 
-        autocomplete.showListForIndex(ghRequest, routeIfAllResolved, host, i);
+        autocomplete.showListForIndex(ghRequest, routeIfAllResolved, i);
         if (translate.isI18nIsInitialized()) {
             var input = div.find(".pointInput");
             if (i === 0)

@@ -48,11 +48,6 @@ function stringFormat(str, args) {
     }
 }
 
-function formatValue(orig, query) {
-    var pattern = '(' + $.Autocomplete.utils.escapeRegExChars(query) + ')';
-    return orig.replace(/[<>]/g, "_").replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>');
-}
-
 function initI18N() {
     if (global.$) {
         $('#searchButton').attr("value", tr("searchButton"));

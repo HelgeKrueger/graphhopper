@@ -11,7 +11,9 @@ describe('TileLayers', function() {
                 retina: false
             }
         };
-        global.L.tileLayer.wms = jasmine.createSpy('wms');
+        global.L.tileLayer.wms = function () {
+            return 'a tile layer';
+        };
     });
 
     it('gets the correct layer', function () {
